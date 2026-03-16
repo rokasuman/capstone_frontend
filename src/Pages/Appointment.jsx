@@ -4,12 +4,11 @@ import { AppContext } from "../Context/AppContext";
 import { assets } from "../assets/assets";
 import RelatedDoctors from "../Components/RelatedDoctors";
 
-
 const Appointment = () => {
   const { docId } = useParams();
   const { doctors, currencySymbol } = useContext(AppContext);
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [docInfo, setDocInfo] = useState(null);
   const [docSlot, setDocSlot] = useState([]);
@@ -23,46 +22,34 @@ const Appointment = () => {
   };
 
   // Generate available slots for 7 days
-  const getAvailableSlot = async () => {
-    setDocSlot([]);
-
+  const getAvailableSlot = () => {
     const today = new Date();
     const allSlots = [];
 
     for (let i = 0; i < 7; i++) {
-      const currentDate = new Date(today);
-      currentDate.setDate(today.getDate() + i);
+      // Create a new date for each day
+      const dayStart = new Date(today);
+      dayStart.setDate(today.getDate() + i);
 
-      const endTime = new Date(currentDate);
-      endTime.setHours(21, 0, 0, 0); 
-
-      // Set starting time
-      if (i === 0) {
-        // Today
-        if (today.getHours() >= 10) {
-          currentDate.setHours(today.getHours() + i);
-        } else {
-          currentDate.setHours(10);
-        }
+      // Set starting hour
+      if (i === 0 && today.getHours() >= 10) {
+        dayStart.setHours(today.getHours() + 1, 0, 0, 0); // today starts from next hour
       } else {
-        // Future days start at 10 AM
-        currentDate.setHours(10, 0, 0, 0);
+        dayStart.setHours(10, 0, 0, 0); // future days start at 10 AM
       }
 
+      const endTime = new Date(dayStart);
+      endTime.setHours(21, 0, 0, 0); // end at 9 PM
+
       const timeSlots = [];
+      let slotTimeClone = new Date(dayStart); // clone to avoid mutation
 
-      while (currentDate < endTime) {
-        const formattedTime = currentDate.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-
+      while (slotTimeClone < endTime) {
         timeSlots.push({
-          datetime: new Date(currentDate),
-          time: formattedTime,
+          datetime: new Date(slotTimeClone), // clone object
+          time: slotTimeClone.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         });
-
-        currentDate.setHours(currentDate.getHours() + 1); 
+        slotTimeClone.setHours(slotTimeClone.getHours() + 1); // increment 1 hour
       }
 
       allSlots.push(timeSlots);
@@ -148,7 +135,7 @@ const Appointment = () => {
           {docSlot.map((daySlots, index) => (
             <div
               key={index}
-              className={` p-3 rounded-2xl border  ${
+              className={`p-3 rounded-2xl border  ${
                 index === slotIndex
                   ? "bg-blue-500 text-white"
                   : "bg-white text-black"
@@ -166,7 +153,7 @@ const Appointment = () => {
           ))}
         </div>
 
-        {/* --------Time Slots0----------- */}
+        {/* --------Time Slots----------- */}
         <div className="grid grid-cols-6 sm:grid-cols-6 gap-3 mt-6">
           {docSlot[slotIndex]?.map((slot, i) => (
             <button
@@ -189,13 +176,18 @@ const Appointment = () => {
           </p>
         )}
       </div>
+
       <div className="flex justify-center items-center mt-8 ">
-        <button className="bg-blue-600 text-white py-3 px-3 rounded-full hover:cursor-pointer" onClick={()=>navigate('/my-appointment')}>Book Appointment</button>
+        <button
+          className="bg-blue-600 text-white py-3 px-3 rounded-full hover:cursor-pointer"
+          onClick={() => navigate("/my-appointment")}
+        >
+          Book Appointment
+        </button>
       </div>
 
       {/*----listing the related doctors-----  */}
-      <RelatedDoctors docId={docId} speciality={docInfo.speciality}/>
-    
+      <RelatedDoctors docId={docId} speciality={docInfo.speciality} />
     </div>
   );
 };

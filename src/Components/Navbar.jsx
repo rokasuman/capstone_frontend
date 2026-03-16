@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { assets } from '../assets/assets'
 import { NavLink, useNavigate } from 'react-router-dom'
+import { FaHome } from "react-icons/fa";
 
 const Navbar = () => {
   
@@ -24,7 +25,7 @@ const Navbar = () => {
         >
           {({ isActive }) => (
             <li className='py-1 flex flex-col items-center'>
-              Home
+            Home
               {isActive && (
                 <hr className='border-none outline-none h-0.5 bg-blue-500 w-3/5 mt-1' />
               )}

@@ -3,7 +3,7 @@ import { assets } from '../assets/assets'
 
 const Header = () => {
   return (
-    <div className='flex flex-col md:flex-row flex-wrap bg-blue-100 rounded-3xl px-6 md:px-10 lg:px-20'>
+    <div className='flex flex-col md:flex-row flex-wrap bg-blue-100 rounded-3xl px-6 md:px-10 lg:px-40 mt-15'>
         <div className='md:w-1/2 flex flex-col items-start justify-center gap-4 py-6 m-auto md:py-[5vw] md:mb-[15px] '>
             <p className='text-3xl md:text-4xl lg:text-5xl text-blue-600 font-semibold leading-tight md:leading-tight lg:leading-tight '>Book Appointment <br/> with Trusted Doctors in Nova HealthCare.
                
