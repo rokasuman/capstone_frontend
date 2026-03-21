@@ -1,16 +1,50 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AppContext } from "../Context/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 const Login = () => {
+
+  const {backendUrl,token,setToken} = useContext(AppContext)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [state, setState] = useState("sign up");
   const [name, setName] = useState("");
+  const navigate = useNavigate()
 
   const onSubmitHandler = async (event) => {
-    event.preventDefault(); 
+  
+    event.preventDefault();
+    try {
+      if(state==="sign up"){
+        const {data } = await axios.post(backendUrl +"/api/user/register",{name,password,email})
+        if(data.success){
+          localStorage.setItem("token",data.token)
+          setToken(data.token)
+        }else{
+          toast.error(data.message)
+        }
+      }else{
+        const {data } = await axios.post(backendUrl +"/api/user/login",{email,password})
+        if(data.success){
+          localStorage.setItem("token",data.token)
+          setToken(data.token)
+        }else{
+          toast.error(data.message)
+        }
+      }
+    } catch (error) {
+      toast.error(error.message)
+    } 
     console.log({ name, email, password });
   };
-
+ 
+  useEffect(()=>{
+    if(token){
+      navigate("/")
+    }
+  },[token])
   return (
     <form
       onSubmit={onSubmitHandler}
@@ -46,7 +80,7 @@ const Login = () => {
           <p className="mb-1 font-medium">Email</p>
           <input
             type="email"
-            onChange={(e) => setEmail(e.target.value)} // ✅ fixed wrong set function
+            onChange={(e) => setEmail(e.target.value)} 
             value={email}
             placeholder="Enter your email"
             className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-400"

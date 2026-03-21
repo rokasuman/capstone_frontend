@@ -3,10 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 import { assets } from "../assets/assets";
 import RelatedDoctors from "../Components/RelatedDoctors";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const Appointment = () => {
   const { docId } = useParams();
-  const { doctors, currencySymbol } = useContext(AppContext);
+  const { doctors, currencySymbol,backendUrl, token, getAllDoctorsData,userData} = useContext(AppContext);
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
   const navigate = useNavigate();
 
@@ -57,6 +59,56 @@ const Appointment = () => {
 
     setDocSlot(allSlots);
   };
+
+
+  //function to book the appointment
+ const bookAppointment = async () => {
+  if (!token) {
+    toast.warn("Login to book appointment");
+    return navigate("/login");
+  }
+  if (!slotTime) {
+    toast.warn("Please select a time slot");
+    return;
+  }
+
+  try {
+    const selectedSlot = docSlot[slotIndex].find(
+      (slot) => slot.time === slotTime
+    );
+
+    if (!selectedSlot) {
+      toast.warn("Invalid slot selected");
+      return;
+    }
+
+    const slotDateTime = selectedSlot.datetime;
+    const slotDate = `${slotDateTime.getDate()}_${slotDateTime.getMonth() + 1}_${slotDateTime.getFullYear()}`;
+    const slotTimeStr = selectedSlot.time;
+
+    const { data } = await axios.post(
+      backendUrl + "/api/user/book-appointment",
+      {
+        userId: userData._id,   
+        docId: docInfo._id,
+        slotDate,               
+        slotTime: slotTimeStr    
+      },
+      { headers: { token } }
+    );
+
+    if (data.success) {
+      toast.success(data.message);
+      getAllDoctorsData();
+      navigate("/my-appointment");
+    } else {
+      toast.error(data.message);
+    }
+  } catch (error) {
+    console.log(error);
+    toast.error("Failed to book appointment");
+  }
+};
 
   useEffect(() => {
     fetchDocInfo();
@@ -179,8 +231,9 @@ const Appointment = () => {
 
       <div className="flex justify-center items-center mt-8 ">
         <button
+        
           className="bg-blue-600 text-white py-3 px-3 rounded-full hover:cursor-pointer"
-          onClick={() => navigate("/my-appointment")}
+          onClick={bookAppointment}
         >
           Book Appointment
         </button>
