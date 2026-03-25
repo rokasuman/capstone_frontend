@@ -10,7 +10,8 @@ import MyAppointment from "./Pages/MyAppointment";
 import Navbar from "./Components/Navbar";
 import  Footer  from "./Components/Footer";
 import Appointment from "./Pages/Appointment";
-import { ToastContainer,toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+
 
 const App = () => {
   return (

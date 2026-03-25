@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -57,7 +57,7 @@ const[ userData, setUserData]= useState(false)
     loadUserProfileData,
     userData,
     setUserData,
-    getAllDoctorsData,
+    getAllDoctorsData
     
   
     
