@@ -41,23 +41,40 @@ const MyProfile = () => {
 
   if (!userData) return <p>Loading profile...</p>;
 
-  return (
-    <div className="max-w-lg flex flex-col gap-2 text-sm">
-      {
-        isEdit 
-        ? <label htmlFor="image">
-          <div className="inline-block relative cursor-pointer">
-            <img className="w-36 rounded opacity-75" src={image ? URL.createObjectURL(image) : userData.image} alt="" />
-            <img className="w-10 absolute bottom-12 right-12" src={image ? "": assets.upload_icon}  alt="" />
+return (
+  <div className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-lg border border-gray-100 flex flex-col gap-6 mt-12">
+
+   
+    <div className="flex flex-col items-center gap-3">
+      {isEdit ? (
+        <label htmlFor="image" className="cursor-pointer relative group">
+          <img
+            className="w-32 h-32 object-cover rounded-full border-4 border-gray-200 shadow-md group-hover:opacity-80 transition"
+            src={image ? URL.createObjectURL(image) : userData.image}
+            alt=""
+          />
+          <div className="absolute bottom-0 right-0 bg-blue-500 p-2 rounded-full shadow-md">
+            <img src={assets.upload_icon} className="w-4 h-4" />
           </div>
-          <input onChange={(e)=>setImage(e.target.files[0])} type="file" id="image" hidden/>
+          <input
+            onChange={(e) => setImage(e.target.files[0])}
+            type="file"
+            id="image"
+            hidden
+          />
         </label>
-        :<img className="w-36 rounded" src={userData.image} alt="profile" />
-      }
-      
+      ) : (
+        <img
+          className="w-32 h-32 object-cover rounded-full border-4 border-gray-200 shadow-md"
+          src={userData.image}
+          alt="profile"
+        />
+      )}
+
+      {/* Name */}
       {isEdit ? (
         <input
-          className="bg-gray-100 text-3xl font-medium max-w-60 mt-4"
+          className="text-center text-xl font-semibold bg-gray-100 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           type="text"
           value={userData.name}
           onChange={(e) =>
@@ -65,26 +82,34 @@ const MyProfile = () => {
           }
         />
       ) : (
-        <p className="font-medium text-3xl text-neutral-800 mt-4">
+        <p className="text-2xl font-semibold text-gray-800">
           {userData.name}
         </p>
       )}
+    </div>
 
-      <hr className="bg-zinc-400 h-[1px] border-none" />
+    <hr className="border-gray-200" />
 
-      {/* Basic Info */}
-      <div>
-        <p className="text-neutral-500 underline mt-3 font-semibold">
-          BASIC INFORMATION
-        </p>
-        <div className="grid grid-cols-[1fr_3fr] gap-y-2.5 mt-3 text-neutral-500">
-          <p className="font-semibold">Email ID: </p>
-          <p className="text-blue-500">{userData.email}</p>
+    {/* Info Section */}
+    <div className="space-y-4">
+      <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+        Basic Information
+      </h2>
 
-          <p className="font-medium">Number:</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+
+        {/* Email */}
+        <div>
+          <label className="text-gray-500">Email</label>
+          <p className="text-blue-600 font-medium">{userData.email}</p>
+        </div>
+
+        {/* Number */}
+        <div>
+          <label className="text-gray-500">Phone</label>
           {isEdit ? (
             <input
-              className="bg-gray-100 max-w-52"
+              className="w-full mt-1 px-3 py-2 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="number"
               value={userData.Number}
               onChange={(e) =>
@@ -92,13 +117,16 @@ const MyProfile = () => {
               }
             />
           ) : (
-            <p className="text-gray-500">{userData.Number}</p>
+            <p className="font-medium">{userData.Number}</p>
           )}
+        </div>
 
-          <p className="font-semibold">Address:</p>
+        {/* Address */}
+        <div>
+          <label className="text-gray-500">Address</label>
           {isEdit ? (
             <input
-              className="bg-gray-100 max-w-52"
+              className="w-full mt-1 px-3 py-2 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="text"
               value={userData.address}
               onChange={(e) =>
@@ -106,13 +134,16 @@ const MyProfile = () => {
               }
             />
           ) : (
-            <p className="text-gray-500">{userData.address}</p>
+            <p className="font-medium">{userData.address}</p>
           )}
+        </div>
 
-          <p className="font-semibold">DOB:</p>
+        {/* DOB */}
+        <div>
+          <label className="text-gray-500">Date of Birth</label>
           {isEdit ? (
             <input
-              className="bg-gray-100 max-w-52"
+              className="w-full mt-1 px-3 py-2 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="date"
               value={userData.dob}
               onChange={(e) =>
@@ -120,12 +151,16 @@ const MyProfile = () => {
               }
             />
           ) : (
-            <p className="text-gray-500">{userData.dob}</p>
+            <p className="font-medium">{userData.dob}</p>
           )}
+        </div>
 
-          <p className="font-semibold">Gender:</p>
+        {/* Gender */}
+        <div>
+          <label className="text-gray-500">Gender</label>
           {isEdit ? (
             <select
+              className="w-full mt-1 px-3 py-2 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
               value={userData.gender}
               onChange={(e) =>
                 setUserData((prev) => ({ ...prev, gender: e.target.value }))
@@ -135,31 +170,32 @@ const MyProfile = () => {
               <option value="Female">Female</option>
             </select>
           ) : (
-            <p className="text-gray-500">{userData.gender}</p>
+            <p className="font-medium">{userData.gender}</p>
           )}
         </div>
-      </div>
 
-      {/* Edit / Save Button */}
-      <div>
-        {isEdit ? (
-          <button
-            className="bg-blue-500 rounded-full px-8 py-2 cursor-pointer text-white mb-7 mt-4"
-            onClick={updateUserProfileData}
-          >
-            Save Information
-          </button>
-        ) : (
-          <button
-            className="bg-blue-500 rounded-full px-8 py-2 cursor-pointer text-white mb-7 mt-4"
-            onClick={() => setIsEdit(true)}
-          >
-            Edit
-          </button>
-        )}
       </div>
     </div>
-  );
-};
 
+    {/* Button */}
+    <div className="flex justify-center mt-4">
+      {isEdit ? (
+        <button
+          onClick={updateUserProfileData}
+          className="px-8 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full shadow-md hover:scale-105 transition"
+        >
+          Save Changes
+        </button>
+      ) : (
+        <button
+          onClick={() => setIsEdit(true)}
+          className="px-8 py-2 bg-gray-900 text-white rounded-full shadow-md hover:bg-gray-800 transition"
+        >
+          Edit Profile
+        </button>
+      )}
+    </div>
+  </div>
+);
+}
 export default MyProfile;

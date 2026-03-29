@@ -57,14 +57,21 @@ const[ userData, setUserData]= useState(false)
     loadUserProfileData,
     userData,
     setUserData,
-    getAllDoctorsData
+    getAllDoctorsData,
+    setDoctors
     
   
     
   };
-  useEffect(()=>{
-     getAllDoctorsData()
-  },[])
+  useEffect(() => {
+  getAllDoctorsData();
+
+  const interval = setInterval(() => {
+    getAllDoctorsData();
+  }, 3000); 
+
+  return () => clearInterval(interval);
+}, []);
 
   useEffect(()=>{
     if(token){

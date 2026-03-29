@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { assets } from '../assets/assets'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { FaHome } from "react-icons/fa";
+
 import { AppContext } from '../Context/AppContext';
 
 const Navbar = () => {
@@ -100,13 +100,13 @@ const Navbar = () => {
                 <img className ="w-2.5"src={assets.dropdown_icon} alt=''/>
                 <div className='absolute top-0 right-0 pt-14 text-base font-medium text-black z-20 hidden group-hover:block'>
                     <div className='min-w-48 bg-gray-200 rounded flex flex-col gap-4 p-4 mt-4'>
-                        <p onClick={()=>navigate('./my-profile')} className='hover:text-blue-500 cursor-pointer'>My Profile</p>
-                        <p onClick={()=>navigate('./my-appointment')} className='hover:text-blue-500 cursor-pointer'>My Appointment</p>
+                        <p onClick={()=>navigate('/my-profile')} className='hover:text-blue-500 cursor-pointer'>My Profile</p>
+                        <p onClick={()=>navigate('/my-appointment')} className='hover:text-blue-500 cursor-pointer'>My Appointment</p>
                         <p onClick={logout} className='hover:text-blue-500 cursor-pointer'>Logout</p>
                     </div>
                 </div>
             </div>
-            :<button onClick={()=>navigate('./login')} className='bg-blue-500 text-white px-8 py-3 rounded-full font-light md:block cursor-pointer'>
+            :<button onClick={()=>navigate("/login")} className='bg-blue-500 text-white px-8 py-3 rounded-full font-light md:block cursor-pointer'>
           Create Account
         </button>
          }
