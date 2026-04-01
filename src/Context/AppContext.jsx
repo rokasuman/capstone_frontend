@@ -13,7 +13,7 @@ const AppContextProvider = (props) => {
 const [doctors,setDoctors] = useState([])  
 
 //state to store the token 
-const [token,setToken] = useState(localStorage.getItem("token")?localStorage.getItem("token"):false)
+const [token, setToken] = useState(localStorage.getItem("token") || false);
 const[ userData, setUserData]= useState(false)
 
 
