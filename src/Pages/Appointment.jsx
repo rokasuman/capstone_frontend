@@ -121,14 +121,14 @@ const Appointment = () => {
       );
 
       if (data.success) {
-        toast.success(data.message);
+        toast.success("Appontment had been booked")
 
         setSlotTime("");
 
-        //refresh from backend 
-        await refreshSlots();
+        
 
         navigate("/my-appointment");
+        refreshSlots();
       } else {
         toast.error(data.message);
       }
