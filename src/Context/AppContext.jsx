@@ -66,11 +66,6 @@ const[ userData, setUserData]= useState(false)
   useEffect(() => {
   getAllDoctorsData();
 
-  const interval = setInterval(() => {
-    getAllDoctorsData();
-  }, 3000); 
-
-  return () => clearInterval(interval);
 }, []);
 
   useEffect(()=>{
