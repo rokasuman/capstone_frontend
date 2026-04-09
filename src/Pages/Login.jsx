@@ -40,11 +40,11 @@ const Login = () => {
     console.log({ name, email, password });
   };
  
-  useEffect(()=>{
-    if(token){
-      navigate("/")
-    }
-  },[token])
+useEffect(() => {
+  if (token || localStorage.getItem("token")) {
+    navigate("/");
+  }
+}, [token]);
   return (
     <form
       onSubmit={onSubmitHandler}
