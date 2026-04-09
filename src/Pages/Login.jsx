@@ -9,7 +9,7 @@ const Login = () => {
   const {backendUrl,token,setToken} = useContext(AppContext)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [state, setState] = useState("sign up");
+  const [state, setState] = useState("login");
   const [name, setName] = useState("");
   const navigate = useNavigate()
 
@@ -22,7 +22,7 @@ const Login = () => {
         if(data.success){
           localStorage.setItem("token",data.token)
           setToken(data.token)
-          toast.success("Account created SuccessFully. You may login Now")
+          navigate("/") 
         }else{
           toast.error(data.message)
         }
@@ -31,6 +31,7 @@ const Login = () => {
         if(data.success){
           localStorage.setItem("token",data.token)
           setToken(data.token)
+          navigate("/") 
         }else{
           toast.error(data.message)
         }
