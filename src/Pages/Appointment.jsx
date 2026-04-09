@@ -25,8 +25,9 @@ const Appointment = () => {
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTime] = useState("");
   const [bookedSlots, setBookedSlots] = useState({});
+  const [loading, setLoading] = useState(false); 
 
-  // Fetch doctor info
+  // Fetch doctor
   const fetchDocInfo = () => {
     const doctor = doctors.find((doc) => doc._id === docId);
     if (doctor) {
@@ -77,26 +78,7 @@ const Appointment = () => {
     setDocSlot(allSlots);
   };
 
-  // fetch fresh slots from backend
-  const refreshSlots = async () => {
-    try {
-      const { data } = await axios.get(
-        `${backendUrl}/api/doctor/list`
-      );
-
-      const updatedDoctor = data.doctors.find(
-        (doc) => doc._id === docId
-      );
-
-      if (updatedDoctor) {
-        setBookedSlots(updatedDoctor.slot_booked || {});
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  //  BOOK APPOINTMENT
+  // Book appointment
   const bookAppointment = async () => {
     if (!token) {
       toast.warn("Login to book appointment");
@@ -107,35 +89,43 @@ const Appointment = () => {
       return toast.error("Please select a time slot");
     }
 
-    try {
-      const dateObj = docSlot[slotIndex][0].datetime;
+    if (loading) return;
 
-      const slotDate = `${dateObj.getDate()}_${
-        dateObj.getMonth() + 1
-      }_${dateObj.getFullYear()}`;
+    setLoading(true);
+
+    try {
+      const selectedSlot = docSlot[slotIndex].find(
+        (slot) => slot.time === slotTime
+      );
+
+      if (!selectedSlot) {
+        toast.error("Invalid slot selected");
+        setLoading(false);
+        return;
+      }
+
+      const dateObj = selectedSlot.datetime;
+
+      const slotDate = `${dateObj.getDate()}_${dateObj.getMonth() + 1}_${dateObj.getFullYear()}`;
 
       const { data } = await axios.post(
         `${backendUrl}/api/user/book-appointment`,
-        { docId, slotDate, slotTime },
+        { docId, slotDate, slotTime }, 
         { headers: { token } }
       );
 
       if (data.success) {
-        toast.success("Appontment had been booked")
-
-        setSlotTime("");
-
-        
-
         navigate("/my-appointment");
-        refreshSlots();
       } else {
         toast.error(data.message);
       }
+
     } catch (error) {
       console.log(error);
       toast.error(error.message);
     }
+
+    setLoading(false);
   };
 
   // Load doctor
@@ -205,7 +195,10 @@ const Appointment = () => {
           {docSlot.map((day, index) => (
             <div
               key={index}
-              onClick={() => setSlotIndex(index)}
+              onClick={() => {
+                setSlotIndex(index);
+                setSlotTime("");
+              }}
               className={`p-3 rounded-xl cursor-pointer ${
                 index === slotIndex
                   ? "bg-blue-500 text-white"
@@ -264,10 +257,10 @@ const Appointment = () => {
         {/* Button */}
         <button
           onClick={bookAppointment}
-          disabled={!slotTime}
+          disabled={!slotTime || loading}
           className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-full"
         >
-          Book Appointment
+          {loading ? "Booking..." : "Book Appointment"}
         </button>
       </div>
 

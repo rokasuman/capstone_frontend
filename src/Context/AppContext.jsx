@@ -8,6 +8,7 @@ const AppContextProvider = (props) => {
   const currencySymbol = '$'
   //import backend url 
   const backendUrl = import.meta.env.VITE_BACKEND_URL 
+  console.log("backendURL:",backendUrl)
 
   //state to store the doc
 const [doctors,setDoctors] = useState([])  
