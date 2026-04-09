@@ -13,8 +13,8 @@ const Appointment = () => {
     doctors,
     currencySymbol,
     backendUrl,
-    token,
-   userData
+    token
+   
   } = useContext(AppContext);
 
   const navigate = useNavigate();
@@ -111,7 +111,7 @@ const Appointment = () => {
 
       const { data } = await axios.post(
         `${backendUrl}/api/user/book-appointment`,
-        { userId:userData._id,docId, slotDate, slotTime }, 
+        { docId, slotDate, slotTime }, 
         { headers: { token } }
       );
 
