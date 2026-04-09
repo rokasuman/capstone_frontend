@@ -115,6 +115,7 @@ const Appointment = () => {
       );
 
       if (data.success) {
+        toast.success("Appointment has been booked ")
         navigate("/my-appointment");
       } else {
         toast.error(data.message);
