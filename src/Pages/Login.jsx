@@ -22,7 +22,7 @@ const Login = () => {
         if(data.success){
           localStorage.setItem("token",data.token)
           setToken(data.token)
-          navigate("/")
+          toast.success("Account created SuccessFully. You may login Now")
         }else{
           toast.error(data.message)
         }
